@@ -9,6 +9,11 @@
 typedef struct {
     double real;
     double imaginary;
-} Complex_Number;
+} Complex_Number_Cartesian;
+
+typedef struct { //https://en.wikipedia.org/wiki/Complex_number#Notation
+    double absolut;
+    double angle;
+} Complex_Number_Polar;
 
 #endif

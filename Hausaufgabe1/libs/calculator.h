@@ -7,9 +7,10 @@
 
 #include "complex_number.h"
 
-Complex_Number add(Complex_Number number1, Complex_Number number2);
-Complex_Number subtract(Complex_Number number1, Complex_Number number2);
-Complex_Number multiply(Complex_Number number1, Complex_Number number2);
-Complex_Number divide(Complex_Number number1, Complex_Number number2);
+Complex_Number_Cartesian add(Complex_Number_Cartesian number1, Complex_Number_Cartesian number2);
+Complex_Number_Cartesian subtract(Complex_Number_Cartesian number1, Complex_Number_Cartesian number2);
+Complex_Number_Cartesian multiply(Complex_Number_Cartesian number1, Complex_Number_Cartesian number2);
+Complex_Number_Cartesian divide(Complex_Number_Cartesian number1, Complex_Number_Cartesian number2);
+Complex_Number_Polar cartesianToPolar(Complex_Number_Cartesian numberCartesian);
 
 #endif
