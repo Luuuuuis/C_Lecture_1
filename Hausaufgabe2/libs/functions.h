@@ -6,6 +6,7 @@
 #define HAUSAUFGABEN_FUNCTIONS_H
 
 double f(double xn);
-double fDerivation(double xn);
+double fAnalyticalApproximation(double xn);
+double fNumericalApproximation(double xn);
 
 #endif //HAUSAUFGABEN_FUNCTIONS_H
