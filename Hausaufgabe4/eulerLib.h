@@ -5,6 +5,15 @@
 #ifndef EULERLIB_H
 #define EULERLIB_H
 
-void eulerForward();
+typedef struct {
+    double *(*f)(double, double);
+    double time;
+    double stepSize;
+    double position;
+    double speed;
+} SimulationProperties;
+
+double *rightHandSide(double speed, double position);
+void eulerForward(SimulationProperties *simProp);
 
 #endif //EULERLIB_H
