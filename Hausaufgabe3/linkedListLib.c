@@ -219,8 +219,102 @@ void exitFcn(listElement *start) {
     saveList(start);
 }
 
+int getRandomNumberInRange(int lower, int upper) {
+    return (rand() % (upper - lower + 1)) + lower;
+}
+
+bool numberExistsInArray(int array[], int number) {
+    for (int i = 0; i < 100; ++i) {
+        if (array[i] == number) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/*
+void shufflePointers(listElement *start) {
+    int used[getLenOfList(start)];
+
+    for (int i = 0; i < getLenOfList(start); i++) {
+        int attempts = 0;
+        int randomElementId = getRandomNumberInRange(0, getLenOfList(start));
+        while (numberExistsInArray(used, randomElementId) && attempts < 10) {
+            printf("number %d rnd exists\n", randomElementId);
+            randomElementId = getRandomNumberInRange(0, getLenOfList(start));
+            attempts++;
+        }
+
+        if(attempts >= 10) {
+            printf("broky broky scoot scoot");
+            return;
+        }
+
+        listElement *randomElement = findElementByIndex(start, randomElementId);
+        findElementByIndex(start, i)->nextElem = randomElement;
+
+        used[i] = randomElementId;
+    }
+}
+
 void sortList(listElement *start) {
-    printf("\n>>sortList fcn is tbd.\n\n");
+    if(isLastElement(start)) {
+        printf("nix zu sortieren :(\n");
+        return;
+    }
+
+    bool isSortedInverted = true;
+
+    while (isSortedInverted) {
+        listElement *currElem = start->nextElem;
+        while (!isLastElement(currElem)) {
+            int iPrev = currElem->age;
+            currElem = currElem->nextElem;
+            int iNow = currElem->age;
+
+            printf("prev: %d now: %d\n", iPrev, iNow);
+            isSortedInverted = iPrev > iNow;
+        }
+
+        shufflePointers(start);
+    }
+
+} */
+
+void sortList(listElement *start) {
+    int lengthList = getLenOfList(start);
+    int sorted = 0;
+    listElement *prevElem = NULL;
+    listElement *currElem;
+    listElement *nextElement;
+
+
+    while (!sorted) {
+        sorted = 1;
+        prevElem = NULL;
+        currElem = start;
+        nextElement = currElem->nextElem;
+
+        for (int i = 0; i <= lengthList - 1; i++) {
+            if (currElem->age > nextElement->age) {
+                sorted = 0;
+
+                listElement *temp = currElem;
+                if (prevElem != NULL) {
+                    prevElem->nextElem = nextElement;
+                }
+
+                currElem->nextElem = nextElement->nextElem;
+                nextElement->nextElem = temp;
+                currElem = nextElement;
+                nextElement = currElem->nextElem;
+            } else {
+                prevElem = currElem;
+                currElem = nextElement;
+                nextElement = nextElement->nextElem;
+            }
+        }
+    }
 }
 
 void stringToLower(char *string) {
