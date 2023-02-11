@@ -7,6 +7,35 @@
 #include <math.h>
 #include "eulerLib.h"
 
+double scanForNumericInput() {
+    double value;
+
+    while (scanf("%lf", &value) != 1) {
+        printf("Invalid input... Please input an integer.\nTry again: \n");
+        fflush(stdin); // flush any leftover characters in the stdin
+    }
+
+    return value;
+}
+
+SimulationProperties *promptUserInput() {
+    SimulationProperties *simProps = malloc(sizeof(SimulationProperties));
+
+    printf("Simulation time (in s): \n");
+    simProps->time = scanForNumericInput();
+
+    printf("StepSize: \n");
+    simProps->stepSize = scanForNumericInput();
+
+    printf("Start position: \n");
+    simProps->position = scanForNumericInput();
+
+    printf("Start speed: \n");
+    simProps->speed = scanForNumericInput();
+
+    return simProps;
+}
+
 double *rightHandSide(double speed, double position) {
 /*    double m = 1.0; // mass of object
     double c = 5.0; // feder constant
@@ -23,7 +52,7 @@ double *rightHandSide(double speed, double position) {
 }
 
 void eulerForward(SimulationProperties *simProp) {
-    double iterations = ceil(simProp->time / simProp->stepSize);;
+    double iterations = ceil(simProp->time / simProp->stepSize);
 
     double position = simProp->position;
     double speed = simProp->speed;
@@ -48,10 +77,14 @@ void eulerForward(SimulationProperties *simProp) {
 
         fprintf(fPtr, "%lf %lf %lf\n", time, position, speed);
         printf("t: %lf; v: %lf; x: %lf\n", time, speed, position);
+
+        free(rhd);
     }
 
     fclose(fPtr);
+}
 
+void showResults() {
     FILE *gnuplotPipe = popen("gnuplot -persistent", "w");
 
     fprintf(gnuplotPipe, "set title 'Results'\n"
