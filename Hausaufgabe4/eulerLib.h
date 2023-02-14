@@ -6,12 +6,18 @@
 #define EULERLIB_H
 
 typedef struct {
-    double *(*f)(double, double);
-
     double time;
-    double stepSize;
     double position;
     double speed;
+} Vector;
+
+typedef struct {
+    double *(*function)(double, double);
+    double stepSize;
+    double duration;
+    int iterations;
+
+    Vector *vectors;
 } SimulationProperties;
 
 SimulationProperties *promptUserInput();

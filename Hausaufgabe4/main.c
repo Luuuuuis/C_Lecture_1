@@ -1,12 +1,13 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "eulerLib.h"
 
 int main() {
     SimulationProperties *simProps = promptUserInput();
-    simProps->f = rightHandSide;
+    simProps->function = rightHandSide;
 
     eulerForward(simProps);
     showResults();
 
-    free(simProps);
+    //free(simProps);
 }
