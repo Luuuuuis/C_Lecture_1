@@ -3,7 +3,7 @@
 
 int main() {
     SimulationProperties *simProps = promptUserInput();
-    simProps->f = rightHandSide;
+    simProps->function = rightHandSide;
 
     eulerForward(simProps);
     showResults();

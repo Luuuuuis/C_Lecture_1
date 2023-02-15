@@ -21,25 +21,38 @@ double scanForNumericInput() {
 SimulationProperties *promptUserInput() {
     SimulationProperties *simProps = malloc(sizeof(SimulationProperties));
 
-    printf("Simulation time (in s): \n");
-    simProps->time = scanForNumericInput();
+    printf("Simulation duration (in s): \n");
+    simProps->duration = scanForNumericInput();
 
     printf("StepSize: \n");
     simProps->stepSize = scanForNumericInput();
 
+    simProps->iterations = ceil(simProps->duration / simProps->stepSize);
+    Vector *vectors = malloc((simProps->iterations + 1) * sizeof(Vector));
+    simProps->vectors = vectors;
+
+    Vector vector_0;
+    vector_0.time = 0;
+
     printf("Start position: \n");
-    simProps->position = scanForNumericInput();
+    vector_0.position = scanForNumericInput();
 
     printf("Start speed: \n");
-    simProps->speed = scanForNumericInput();
+    vector_0.speed = scanForNumericInput();
+
+    simProps->vectors[0] = vector_0;
 
     return simProps;
 }
 
 double *rightHandSide(double speed, double position) {
-/*    double m = 1.0; // mass of object
-    double c = 5.0; // feder constant
-    double d = 0.25; // damper constant*/
+
+    // "Normaler" Fall
+//    double m = 1.0; // mass of object
+//    double c = 5.0; // feder constant
+//    double d = 0.25; // damper constant
+
+    // Aperiodischer-Grenzfall
     double m = 1.0;
     double c = 2.0;
     double d = 3;
@@ -52,31 +65,26 @@ double *rightHandSide(double speed, double position) {
 }
 
 void eulerForward(SimulationProperties *simProp) {
-    double iterations = ceil(simProp->time / simProp->stepSize);
-
-    double position = simProp->position;
-    double speed = simProp->speed;
-    double time = 0;
-
-    remove("data.txt");
-
-    FILE *fPtr = fopen("data.txt", "a");
+    FILE *fPtr = fopen("data.txt", "w");
     if (fPtr == NULL) {
         printf("Could not open file");
         return;
     }
 
-    for (int i = 0; i < iterations; i++) {
-        double *rhd = rightHandSide(speed, position);
+    for (int i = 0; i < simProp->iterations; i++) {
+        double *rhd = simProp->function(simProp->vectors[i].speed, simProp->vectors[i].position);
 
         // neuer speed = alter speed + (stepSize * neue acceleration)
-        speed = speed + (simProp->stepSize * rhd[1]);
-        // neue pos = alte pos + (stepSize * neuer Speed)
-        position = position + (simProp->stepSize * rhd[0]);
-        time = time + simProp->stepSize;
+        simProp->vectors[i + 1].speed = simProp->vectors[i].speed + (simProp->stepSize * rhd[1]);
 
-        fprintf(fPtr, "%lf %lf %lf\n", time, position, speed);
-        printf("t: %lf; v: %lf; x: %lf\n", time, speed, position);
+        // neue pos = alte pos + (stepSize * neuer Speed)
+        simProp->vectors[i + 1].position = simProp->vectors[i].position + (simProp->stepSize * rhd[0]);
+
+        // neue time = alte time + stepSize
+        simProp->vectors[i + 1].time = simProp->vectors[i].time + simProp->stepSize;
+
+        fprintf(fPtr, "%lf %lf %lf\n", simProp->vectors[i].time, simProp->vectors[i].position, simProp->vectors[i].speed);
+        //printf("t: %lf; v: %lf; x: %lf\n", simProp->vectors[i].time, simProp->vectors[i].speed, simProp->vectors[i].position);
 
         free(rhd);
     }
@@ -85,7 +93,7 @@ void eulerForward(SimulationProperties *simProp) {
 }
 
 void showResults() {
-    FILE *gnuplotPipe = popen("gnuplot -persistent", "w");
+    FILE *gnuplotPipe = popen("gnuplot --persist", "w");
 
     fprintf(gnuplotPipe, "set title 'Results'\n"
                          "set xlabel 'time in sec'\n"
