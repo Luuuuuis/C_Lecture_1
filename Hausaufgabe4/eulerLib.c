@@ -28,7 +28,7 @@ SimulationProperties *promptUserInput() {
     simProps->stepSize = scanForNumericInput();
 
     simProps->iterations = ceil(simProps->duration / simProps->stepSize);
-    Vector *vectors = malloc(simProps->iterations * sizeof(Vector));
+    Vector *vectors = malloc((simProps->iterations + 1) * sizeof(Vector));
     printf("%lld", sizeof (Vector));
     simProps->vectors = vectors;
     printf("allocated spaced: %zu\n", _msize(simProps->vectors));
@@ -48,12 +48,12 @@ SimulationProperties *promptUserInput() {
 }
 
 double *rightHandSide(double speed, double position) {
-/*    double m = 1.0; // mass of object
+    double m = 1.0; // mass of object
     double c = 5.0; // feder constant
-    double d = 0.25; // damper constant*/
-    double m = 1.0;
-    double c = 2.0;
-    double d = 3;
+    double d = 0.25; // damper constant
+//    double m = 1.0;
+//    double c = 2.0;
+//    double d = 3;
 
     double *returnValue = malloc(sizeof(double) * 2);
 
