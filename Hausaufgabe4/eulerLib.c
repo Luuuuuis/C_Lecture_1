@@ -29,9 +29,7 @@ SimulationProperties *promptUserInput() {
 
     simProps->iterations = ceil(simProps->duration / simProps->stepSize);
     Vector *vectors = malloc((simProps->iterations + 1) * sizeof(Vector));
-    printf("%lld", sizeof (Vector));
     simProps->vectors = vectors;
-    printf("allocated spaced: %zu\n", _msize(simProps->vectors));
 
     Vector vector_0;
     vector_0.time = 0;
