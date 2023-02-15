@@ -46,12 +46,16 @@ SimulationProperties *promptUserInput() {
 }
 
 double *rightHandSide(double speed, double position) {
-    double m = 1.0; // mass of object
-    double c = 5.0; // feder constant
-    double d = 0.25; // damper constant
-//    double m = 1.0;
-//    double c = 2.0;
-//    double d = 3;
+
+    // "Normaler" Fall
+//    double m = 1.0; // mass of object
+//    double c = 5.0; // feder constant
+//    double d = 0.25; // damper constant
+
+    // Aperiodischer-Grenzfall
+    double m = 1.0;
+    double c = 2.0;
+    double d = 3;
 
     double *returnValue = malloc(sizeof(double) * 2);
 
@@ -61,7 +65,6 @@ double *rightHandSide(double speed, double position) {
 }
 
 void eulerForward(SimulationProperties *simProp) {
-    remove("data.txt");
     FILE *fPtr = fopen("data.txt", "w");
     if (fPtr == NULL) {
         printf("Could not open file");
@@ -69,7 +72,7 @@ void eulerForward(SimulationProperties *simProp) {
     }
 
     for (int i = 0; i < simProp->iterations; i++) {
-        double *rhd = rightHandSide(simProp->vectors[i].speed, simProp->vectors[i].position);
+        double *rhd = simProp->function(simProp->vectors[i].speed, simProp->vectors[i].position);
 
         // neuer speed = alter speed + (stepSize * neue acceleration)
         simProp->vectors[i + 1].speed = simProp->vectors[i].speed + (simProp->stepSize * rhd[1]);

@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include "eulerLib.h"
 
@@ -9,5 +8,5 @@ int main() {
     eulerForward(simProps);
     showResults();
 
-    //free(simProps);
+    free(simProps);
 }
